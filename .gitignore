@@ -105,3 +105,7 @@ venv.bak/
 
 # VSCode
 .vscode
+
+# pytest
+__pycache__/
+.pytest_cache/
