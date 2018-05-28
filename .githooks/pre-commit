@@ -1,0 +1,12 @@
+#!/bin/sh
+
+pyfiles=$(git diff --cached --name-only --diff-filter=ACM "*.py" | tr '\n' ' ')
+[ -z "$pyfiles" ] && exit 0
+
+# Prettify all staged .js files
+echo "$pyfiles" | xargs black -l99
+
+# Add back the modified/prettified files to staging
+echo "$pyfiles" | xargs git add
+
+exit 0
