@@ -4,7 +4,7 @@ import logging
 
 import astor
 
-import transformations
+from transformations import get_transformations
 
 
 logger = logging.getLogger("transpy")
@@ -44,7 +44,8 @@ def transpile_file(filename_src: Path, out_dir: Path):
         raise TranspileException(e)
 
     # Apply transformations
-    transformations.FStringToFormatTransformer(source_ast)
+    for transformation in get_transformations():
+        transformation(source_ast)
 
     source = astor.to_source(source_ast)
 
