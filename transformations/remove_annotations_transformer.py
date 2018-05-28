@@ -1,6 +1,6 @@
 import ast
 
-import astor
+from .base_transformer import BaseTransformer
 
 
 def replace_node_field(node, replace_field: str, new_value: object):
@@ -15,7 +15,8 @@ def replace_node_field(node, replace_field: str, new_value: object):
     return new_node
 
 
-class RemoveAnnotationsTransformer(astor.tree_walk.TreeWalk):
+class RemoveAnnotationsTransformer(BaseTransformer):
+    minimum_version = [3]
 
     def pre_arg(self):
         """

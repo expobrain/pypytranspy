@@ -1,9 +1,11 @@
 import ast
 
-import astor
+from .base_transformer import BaseTransformer
 
 
-class FStringToFormatTransformer(astor.tree_walk.TreeWalk):
+class FStringToFormatTransformer(BaseTransformer):
+
+    minimum_version = [3, 6]
 
     def pre_JoinedStr(self):
         # Collect string and args for format()
