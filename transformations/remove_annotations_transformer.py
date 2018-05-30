@@ -2,17 +2,7 @@ import ast
 
 from .base_transformer import BaseTransformer
 
-
-def replace_node_field(node, replace_field: str, new_value: object):
-    new_fields = {}
-
-    for field in node._fields:
-        value = new_value if field == replace_field else getattr(node, field)
-        new_fields[field] = value
-
-    new_node = node.__class__(**new_fields)
-
-    return new_node
+from .utils import replace_node_field
 
 
 class RemoveAnnotationsTransformer(BaseTransformer):

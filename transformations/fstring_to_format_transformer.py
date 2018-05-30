@@ -16,7 +16,11 @@ class FStringToFormatTransformer(BaseTransformer):
             if isinstance(value, ast.Str):
                 str_value += value.s
             elif isinstance(value, ast.FormattedValue):
-                str_value += "{}"
+                if value.format_spec is None:
+                    str_value += "{}"
+                else:
+                    str_value += "{:" + "".join(v.s for v in value.format_spec.values) + "}"
+
                 str_args.append(value.value)
             else:
                 raise NotImplementedError(value)
