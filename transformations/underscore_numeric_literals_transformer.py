@@ -14,7 +14,7 @@ class UnderscoreNumericLiteralsTransformer(BaseTransformer):
     def pre_Call(self):
         """
         Converts call to formatting with underscores `{:_}` into call to format
-        pre-formatted values with `transpy.runtime.underscore_literal_format()`
+        pre-formatted values with `pypytranspy.runtime.underscore_literal_format()`
         """
         attribute = self.cur_node.func
 
@@ -47,7 +47,7 @@ class UnderscoreNumericLiteralsTransformer(BaseTransformer):
 
                 new_arg = ast.Call(
                     func=ast.Attribute(
-                        value=ast.Attribute(value=ast.Name(id="transpy"), attr="runtime"),
+                        value=ast.Attribute(value=ast.Name(id="pypytranspy"), attr="runtime"),
                         attr="underscore_literal_format",
                     ),
                     args=[current_arg, ast.Name(id=conversion), ast.Str(s=format_spec)],

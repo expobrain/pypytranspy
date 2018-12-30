@@ -16,15 +16,15 @@ from transformations import UnderscoreNumericLiteralsTransformer
         ('"formatted {:x}".format(n)', '"formatted {:x}".format(n)'),
         (
             '"formatted {:_x}".format(n)',
-            '"formatted {}".format(transpy.runtime.underscore_literal_format(n, str, "x"))',
+            '"formatted {}".format(pypytranspy.runtime.underscore_literal_format(n, str, "x"))',
         ),
         (
             '"formatted {!r:_x}".format(n)',
-            '"formatted {}".format(transpy.runtime.underscore_literal_format(n, repr, "x"))',
+            '"formatted {}".format(pypytranspy.runtime.underscore_literal_format(n, repr, "x"))',
         ),
         (
             '"formatted {!a:_x}".format(n)',
-            '"formatted {}".format(transpy.runtime.underscore_literal_format(n, ascii, "x"))',
+            '"formatted {}".format(pypytranspy.runtime.underscore_literal_format(n, ascii, "x"))',
         ),
         # Non-format string calls
         ('"".upper()', '"".upper()'),
