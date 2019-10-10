@@ -1,7 +1,6 @@
 import ast
 
 from pypytranspy.transformations.base_transformer import BaseTransformer
-
 from pypytranspy.transformations.utils import replace_node_field
 
 

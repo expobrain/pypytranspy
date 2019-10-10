@@ -1,7 +1,7 @@
 import ast
 
-import pytest
 import astor
+import pytest
 
 from pypytranspy.transformations import UnderscoreNumericLiteralsTransformer
 

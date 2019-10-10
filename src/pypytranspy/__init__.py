@@ -6,7 +6,6 @@ import astor
 
 from pypytranspy.transformations import get_transformations
 
-
 logger = logging.getLogger("pypytranspy")
 logger.addHandler(logging.StreamHandler())
 logger.setLevel(logging.DEBUG)

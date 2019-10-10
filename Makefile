@@ -1,5 +1,3 @@
-init:
-	git config core.hooksPath .githooks
-
-format:
-	black -l99 .
+fmt:
+	isort -rc .
+	black .
