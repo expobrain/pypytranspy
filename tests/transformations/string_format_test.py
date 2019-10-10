@@ -1,6 +1,6 @@
 import pytest
 
-from transformations.string_format import StringFormat
+from pypytranspy.transformations.string_format import StringFormat
 
 
 @pytest.mark.parametrize(

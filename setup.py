@@ -3,7 +3,7 @@ from pathlib import Path
 import setuptools
 from pkg_resources import parse_version
 
-from setuptools import setup, find_packages
+from setuptools import setup, find_packages, find_namespace_packages
 
 setup(
     name="pypytranspy",
@@ -12,10 +12,11 @@ setup(
     author="Daniele Esposti",
     author_email="daniele.esposti@gmail.com",
     url="https://github.com/expobrain/pypytranspy",
-    packages=find_packages(exclude=["tests", "tests.*"]),
+    packages=find_namespace_packages(where="src"),
     entry_points={"console_scripts": ["pypytranspy = pypytranspy:main"]},
-    python_requires=">=3",
+    python_requires=">=3.6",
     license="MIT",
+    package_dir={"": "src"},
     install_requires=["astor>=0.8.0"],
     long_description=Path("README.md").read_text(),
     long_description_content_type="text/markdown",

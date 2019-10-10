@@ -3,7 +3,7 @@ import ast
 import pytest
 import astor
 
-from transformations import RemoveAnnotationsTransformer
+from pypytranspy.transformations import RemoveAnnotationsTransformer
 
 
 @pytest.mark.parametrize(

@@ -3,7 +3,7 @@ import ast
 import pytest
 import astor
 
-from transformations import FStringToFormatTransformer
+from pypytranspy.transformations import FStringToFormatTransformer
 
 
 @pytest.mark.parametrize(

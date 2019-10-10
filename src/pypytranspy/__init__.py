@@ -4,7 +4,7 @@ import logging
 
 import astor
 
-from transformations import get_transformations
+from pypytranspy.transformations import get_transformations
 
 
 logger = logging.getLogger("pypytranspy")

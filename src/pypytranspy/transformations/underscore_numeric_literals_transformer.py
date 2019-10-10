@@ -1,7 +1,7 @@
 import ast
 
-from .base_transformer import BaseTransformer
-from .utils import replace_node_field, parse_string_format_iter
+from pypytranspy.transformations.base_transformer import BaseTransformer
+from pypytranspy.transformations.utils import replace_node_field, parse_string_format_iter
 
 
 class UnderscoreNumericLiteralsTransformer(BaseTransformer):

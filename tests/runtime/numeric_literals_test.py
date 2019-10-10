@@ -1,6 +1,6 @@
 import pytest
 
-from runtime import underscore_literal_format
+from pypytranspy.runtime import underscore_literal_format
 
 
 @pytest.mark.parametrize(

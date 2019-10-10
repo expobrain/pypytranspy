@@ -1,8 +1,8 @@
 import ast
 
-from .base_transformer import BaseTransformer
+from pypytranspy.transformations.base_transformer import BaseTransformer
 
-from .utils import replace_node_field
+from pypytranspy.transformations.utils import replace_node_field
 
 
 class RemoveAnnotationsTransformer(BaseTransformer):
