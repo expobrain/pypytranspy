@@ -1,6 +1,5 @@
 from typing import NamedTuple
 
-
 __StringFormat = NamedTuple("StringFormat", field_name=str, conversion=str, format_spec=str)
 __StringFormat.__new__.__defaults__ = (None, None, None)
 

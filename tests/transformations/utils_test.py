@@ -1,7 +1,9 @@
 import pytest
 
-from transformations.underscore_numeric_literals_transformer import parse_string_format_iter
-from transformations.string_format import StringFormat
+from pypytranspy.transformations.string_format import StringFormat
+from pypytranspy.transformations.underscore_numeric_literals_transformer import (
+    parse_string_format_iter,
+)
 
 # -----------------------------------
 # parse_string_format_iter

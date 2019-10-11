@@ -1,6 +1,6 @@
 from typing import Iterator, Tuple
 
-from .string_format import StringFormat
+from pypytranspy.transformations.string_format import StringFormat
 
 
 def replace_node_field(node, replace_field: str, new_value: object):

@@ -1,6 +1,6 @@
 import ast
 
-from .base_transformer import BaseTransformer
+from pypytranspy.transformations.base_transformer import BaseTransformer
 
 
 class FStringToFormatTransformer(BaseTransformer):
