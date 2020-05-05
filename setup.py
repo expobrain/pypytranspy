@@ -14,7 +14,7 @@ setup(
     python_requires=">=3.6",
     license="MIT",
     package_dir={"": "src"},
-    install_requires=["astor~=0.8.0", "Click~=7.0"],
+    install_requires=["astor~=0.8.0", "Click~=7.0", "dataclasses~=0.7;python_version<'3.7'"],
     long_description=Path("README.md").read_text(),
     long_description_content_type="text/markdown",
 )

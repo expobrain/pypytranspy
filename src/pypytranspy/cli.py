@@ -1,5 +1,6 @@
 from pathlib import Path
 from typing import List, Optional
+import dataclasses
 import logging
 
 import astor
@@ -12,41 +13,52 @@ logger.addHandler(logging.StreamHandler())
 logger.setLevel(logging.DEBUG)
 
 
+@dataclasses.dataclass
+class Context:
+    src_path: Path
+    out_path: Path
+    transformations: List[str] = dataclasses.field(default_factory=list)
+
+
 class TranspileException(Exception):
     pass
 
 
-def transpile_dir(dir_src: Path, out_dir: Path):
-    for item in dir_src.iterdir():
+def transpile_dir(context: Context, relative_path: Path):
+    current_path = context.src_path / relative_path
+
+    for item_path in current_path.iterdir():
         # Skip if same as out dir
-        if item == out_dir:
+        if item_path == context.out_path:
             continue
 
         # Transpile file
-        if item.is_file() and item.suffix == ".py":
-            logger.info("Transpiling %s ...", item)
+        if item_path.is_file() and item_path.suffix == ".py":
+            logger.info("Transpiling %s ...", item_path)
 
             try:
-                transpile_file(item, out_dir)
+                transpile_file(context, item_path)
             except TranspileException as e:
-                logger.error(f"Cannot transpile {item}: {e}")
+                logger.error(f"Cannot transpile {item_path}: {e}")
                 continue
 
         # Transpile dir
-        elif item.is_dir():
-            child_out_dir = out_dir / item.parts[-1]
-            child_out_dir.mkdir(exist_ok=True)
+        elif item_path.is_dir():
+            relative_item_path = item_path.relative_to(context.src_path)
+            # child_out_dir = context.out_path / item.parts[-1]
+            # child_out_dir.mkdir(exist_ok=True)
 
-            transpile_dir(item, child_out_dir)
+            transpile_dir(item_path, relative_item_path)
 
         # Anything else
         else:
-            logger.warning("Skipping %s ...", item)
+            logger.warning("Skipping %s ...", item_path)
 
 
-def transpile_file(filename_src: Path, out_dir: Path):
+def transpile_file(content: Context, relative_filename: Path):
     # Setup destination file
-    filename_dest = out_dir / filename_src.name
+    filename_src = content.src_path / relative_filename.name
+    filename_dest = content.out_path / relative_filename.name
 
     logger.info(f"Transpiling file {filename_src} into {filename_dest}")
 
@@ -62,9 +74,11 @@ def transpile_file(filename_src: Path, out_dir: Path):
 
     source = astor.to_source(source_ast)
 
+    # Create dirs if necessary
+    filename_dest.parent.mkdirs(parents=True, exists_ok=True)
+
     # Save file
-    with open(filename_dest, "w") as f:
-        f.write(source)
+    filename_dest.write_text(source)
 
 
 @click.command()
@@ -77,18 +91,19 @@ def transpile_file(filename_src: Path, out_dir: Path):
 @click.argument("src_dir", type=click.Path(exists=True, resolve_path=True))
 @click.argument("out_dir", type=click.Path(exists=True, resolve_path=True, writable=True))
 def main(src_dir: str, out_dir: str, transformations: Optional[List[str]] = None):
-    src_path = Path(src_dir)
-    out_path = Path(out_dir)
+    context = Context(Path(src_dir), Path(out_dir), transformations=transformations)
 
-    if src_path.is_dir():
+    if context.src_path.is_dir():
         # Check that out dir is not inside src dir
-        if out_path in src_path.parents:
-            logger.error(f"Output directory {out_path} is inside source directory {src_path}")
+        if context.out_path in context.src_path.parents:
+            logger.error(
+                f"Output directory {context.out_path} is inside source directory {context.src_path}"
+            )
             exit(1)
 
         # Transpile directory content
-        transpile_dir(src_path, out_path)
-    elif src_path.is_file():
-        transpile_file(src_path, out_path)
+        transpile_dir(context, Path("."))
+    elif context.src_path.is_file():
+        transpile_file(context, context.src_path)
     else:
-        logger.error(f"The path {src_path} is neither a directory nor a file")
+        logger.error(f"The path {context.src_path} is neither a directory nor a file")

@@ -1,20 +1,15 @@
 from pathlib import Path
-from tempfile import TemporaryDirectory
 from unittest.mock import patch
 
-from pypytranspy.cli import transpile_dir
+from pypytranspy.cli import Context, transpile_dir
 
 
-def test_transpile_dir_excludes_out_path():
-    with TemporaryDirectory() as tmp_dir:
-        tmp_path = Path(tmp_dir)
+def test_transpile_dir_excludes_out_path(context: Context):
+    context.out_path = context.src_path / "out"
 
-        src_path = tmp_path / "src"
-        out_path = tmp_path / "src" / "out"
+    context.out_path.mkdir(parents=True, exist_ok=True)
 
-        out_path.mkdir(parents=True)
+    with patch(f"{transpile_dir.__module__}.{transpile_dir.__name__}") as m_transpile:
+        transpile_dir(context, Path("."))
 
-        with patch(f"{transpile_dir.__module__}.{transpile_dir.__name__}") as m_transpile:
-            transpile_dir(src_path, out_path)
-
-            assert m_transpile.call_args is None
+        assert m_transpile.call_args is None
