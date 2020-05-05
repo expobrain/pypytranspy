@@ -18,17 +18,30 @@ class TranspileException(Exception):
 
 def transpile_dir(dir_src: Path, out_dir: Path):
     for item in dir_src.iterdir():
+        # Skip if same as out dir
+        if item == out_dir:
+            continue
+
+        # Transpile file
         if item.is_file() and item.suffix == ".py":
+            logger.info("Transpiling %s ...", item)
+
             try:
                 transpile_file(item, out_dir)
             except TranspileException as e:
-                logger.warning(f"Cannot transpile {item}: {e}")
+                logger.error(f"Cannot transpile {item}: {e}")
                 continue
+
+        # Transpile dir
         elif item.is_dir():
-            child_out_dir: Path = out_dir / item.parts[-1]
+            child_out_dir = out_dir / item.parts[-1]
             child_out_dir.mkdir(exist_ok=True)
 
             transpile_dir(item, child_out_dir)
+
+        # Anything else
+        else:
+            logger.warning("Skipping %s ...", item)
 
 
 def transpile_file(filename_src: Path, out_dir: Path):
