@@ -1,8 +1,11 @@
 from optparse import OptionParser
+from os.path import abspath
 from pathlib import Path
+from typing import List, Optional
 import logging
 
 import astor
+import click
 
 from pypytranspy.transformations import get_transformations
 
@@ -53,49 +56,31 @@ def transpile_file(filename_src: Path, out_dir: Path):
         f.write(source)
 
 
-def main():
-    # Parse CLI arguments
-    parser = OptionParser()
-    parser.add_option(
-        "-o", "--out", dest="out_dir", help="Output directory of the transpiled files"
-    )
+@click.command()
+@click.option(
+    "--transformation",
+    "-t",
+    "transformations",
+    help="Transformatino to be applied. It can be specified multiple times. Order does matter.",
+)
+@click.argument("src_dir", type=click.Path(exists=True, resolve_path=True))
+@click.argument("out_dir", type=click.Path(exists=True, resolve_path=True, writable=True))
+def main(src_dir: str, out_dir: str, transformations: Optional[List[str]] = None):
+    src_path = Path(src_dir)
+    out_path = Path(out_dir)
 
-    (options, args) = parser.parse_args()
-
-    # Check src path
-    if len(args) != 1:
-        logger.error("Need one file or directory as source")
-
-    src = Path(args[0]).absolute()
-
-    # Check out dir
-    if options.out_dir is None:
-        logger.error("Option `out_dir` is null")
-        exit(1)
-
-    out_dir = Path(options.out_dir).absolute()
-
-    if not out_dir.exists():
-        logger.error(f"Directory {out_dir} does not exists")
-        exit(1)
-
-    # Start transpilation
-    if not src.exists():
-        logger.error(f"Path {src} does not exist")
-        exit(1)
-
-    if src.is_dir():
+    if src_path.is_dir():
         # Check that out dir is not inside src dir
-        if out_dir in src.parents:
-            logger.error(f"Output directory {out_dir} is inside source directory {src}")
+        if out_path in src_path.parents:
+            logger.error(f"Output directory {out_path} is inside source directory {src_path}")
             exit(1)
 
         # Transpile directory content
-        transpile_dir(src, out_dir)
-    elif src.is_file():
-        transpile_file(src, out_dir)
+        transpile_dir(src_path, out_path)
+    elif src_path.is_file():
+        transpile_file(src_path, out_path)
     else:
-        logger.error(f"The path {src} is neither a directory nor a file")
+        logger.error(f"The path {src_path} is neither a directory nor a file")
 
 
 if __name__ == "__main__":
