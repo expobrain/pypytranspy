@@ -109,3 +109,6 @@ venv.bak/
 # pytest
 __pycache__/
 .pytest_cache/
+
+# Python packaging
+pip-wheel-metadata/
