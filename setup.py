@@ -1,8 +1,6 @@
 from pathlib import Path
 
-from pkg_resources import parse_version
-from setuptools import find_namespace_packages, find_packages, setup
-import setuptools
+from setuptools import find_namespace_packages, setup
 
 setup(
     name="pypytranspy",
@@ -12,11 +10,11 @@ setup(
     author_email="daniele.esposti@gmail.com",
     url="https://github.com/expobrain/pypytranspy",
     packages=find_namespace_packages(where="src"),
-    entry_points={"console_scripts": ["pypytranspy = pypytranspy:main"]},
+    entry_points={"console_scripts": ["pypytranspy = pypytranspy.cli:main"]},
     python_requires=">=3.6",
     license="MIT",
     package_dir={"": "src"},
-    install_requires=["astor>=0.8.0"],
+    install_requires=["astor~=0.8.0", "Click~=7.0"],
     long_description=Path("README.md").read_text(),
     long_description_content_type="text/markdown",
 )

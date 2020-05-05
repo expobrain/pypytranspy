@@ -24,7 +24,6 @@ def underscore_literal_format(value, conversion: Callable, format_spec: str) -> 
             if i > 0 and i % 4 == 0:
                 new_value = "_" + new_value
 
-            print(value_str_len, i)
             new_value = value_str[value_str_len - i - 1] + new_value
 
         if upper:
