@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import List, Optional
+from typing import List, Optional, Set
 import dataclasses
 import logging
 
@@ -17,7 +17,7 @@ logger.setLevel(logging.DEBUG)
 class Context:
     src_path: Path
     out_path: Path
-    transformations: List[str] = dataclasses.field(default_factory=list)
+    transformations: Set[str]
 
 
 class TranspileException(Exception):
@@ -91,7 +91,7 @@ def transpile_file(content: Context, relative_filename: Path):
 @click.argument("src_dir", type=click.Path(exists=True, resolve_path=True))
 @click.argument("out_dir", type=click.Path(exists=True, resolve_path=True, writable=True))
 def main(src_dir: str, out_dir: str, transformations: Optional[List[str]] = None):
-    context = Context(Path(src_dir), Path(out_dir), transformations=transformations)
+    context = Context(Path(src_dir), Path(out_dir), set(transformations or []))
 
     if context.src_path.is_dir():
         # Check that out dir is not inside src dir
