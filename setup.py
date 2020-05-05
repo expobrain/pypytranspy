@@ -1,8 +1,6 @@
 from pathlib import Path
 
-from pkg_resources import parse_version
-from setuptools import find_namespace_packages, find_packages, setup
-import setuptools
+from setuptools import find_namespace_packages, setup
 
 setup(
     name="pypytranspy",
