@@ -30,7 +30,7 @@ def test_parse_string_format_iter(format_string, expected):
     assert results == expected
 
 
-@pytest.mark.parametrize("string", (["\{\}"], ["\{"], ["\{name}"]))
+@pytest.mark.parametrize("string", ([r"\{\}"], [r"\{"], [r"\{name}"]))
 def test_parse_escaped_string_format_iter(string):
     results = list(parse_string_format_iter(string))
 
