@@ -10,7 +10,7 @@ setup(
     author_email="daniele.esposti@gmail.com",
     url="https://github.com/expobrain/pypytranspy",
     packages=find_namespace_packages(where="src"),
-    entry_points={"console_scripts": ["pypytranspy = pypytranspy:main"]},
+    entry_points={"console_scripts": ["pypytranspy = pypytranspy.cli:main"]},
     python_requires=">=3.6",
     license="MIT",
     package_dir={"": "src"},
