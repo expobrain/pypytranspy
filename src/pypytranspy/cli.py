@@ -87,7 +87,7 @@ def transpile_file(content: Context, relative_filename: Path):
     "--transformation",
     "-t",
     "transformations",
-    help="Transformatino to be applied. It can be specified multiple times. Order does matter.",
+    help="Transformation to be applied. It can be specified multiple times. Order does matter.",
 )
 @click.argument("src_dir", type=click.Path(exists=True, resolve_path=True))
 # @click.argument("out_dir", type=click.Path(exists=True, resolve_path=True, writable=True))
