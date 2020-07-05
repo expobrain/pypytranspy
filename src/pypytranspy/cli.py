@@ -3,7 +3,8 @@ from typing import List, Optional, Set
 import dataclasses
 import logging
 
-import astor
+import libcst as cst
+from libcst.tool import dump
 import click
 
 from pypytranspy.transformations import get_transformations
@@ -64,18 +65,18 @@ def transpile_file(content: Context, relative_filename: Path):
 
     # Parse AST
     try:
-        source_ast = astor.parse_file(filename_src)
+        original_ast = cst.parse_module(filename_src.read_text())
     except Exception as e:
         raise TranspileException(e)
 
     # Apply transformations
-    for transformation in get_transformations():
-        transformation(source_ast)
+    # for transformation in get_transformations():
+    #     transformation(original_ast)
 
-    source = astor.to_source(source_ast)
+    source = original_ast.code
 
     # Create dirs if necessary
-    filename_dest.parent.mkdirs(parents=True, exists_ok=True)
+    filename_dest.parent.mkdir(parents=True, exist_ok=True)
 
     # Save file
     filename_dest.write_text(source)
@@ -89,9 +90,9 @@ def transpile_file(content: Context, relative_filename: Path):
     help="Transformatino to be applied. It can be specified multiple times. Order does matter.",
 )
 @click.argument("src_dir", type=click.Path(exists=True, resolve_path=True))
-@click.argument("out_dir", type=click.Path(exists=True, resolve_path=True, writable=True))
+# @click.argument("out_dir", type=click.Path(exists=True, resolve_path=True, writable=True))
 def main(src_dir: str, out_dir: str, transformations: Optional[List[str]] = None):
-    context = Context(Path(src_dir), Path(out_dir), set(transformations or []))
+    context = Context(Path(src_dir), Path(src_dir), set(transformations or []))
 
     if context.src_path.is_dir():
         # Check that out dir is not inside src dir
