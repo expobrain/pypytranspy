@@ -7,8 +7,6 @@ import libcst as cst
 from libcst.tool import dump
 import click
 
-from pypytranspy.transformations import get_transformations
-
 logger = logging.getLogger("pypytranspy")
 logger.addHandler(logging.StreamHandler())
 logger.setLevel(logging.DEBUG)
