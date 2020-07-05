@@ -33,39 +33,32 @@ def transpile_dir(context: Context, relative_path: Path):
 
         # Transpile file
         if item_path.is_file() and item_path.suffix == ".py":
-            logger.info("Transpiling %s ...", item_path)
-
-            try:
-                transpile_file(context, item_path)
-            except TranspileException as e:
-                logger.error(f"Cannot transpile {item_path}: {e}")
-                continue
+            # try:
+            transpile_file(context, item_path)
+            # except TranspileException as e:
+            #     logger.error(f"Cannot transpile {item_path}: {e}")
+            #     continue
 
         # Transpile dir
         elif item_path.is_dir():
-            relative_item_path = item_path.relative_to(context.src_path)
-            # child_out_dir = context.out_path / item.parts[-1]
-            # child_out_dir.mkdir(exist_ok=True)
-
-            transpile_dir(item_path, relative_item_path)
+            transpile_dir(context, item_path)
 
         # Anything else
         else:
             logger.warning("Skipping %s ...", item_path)
 
 
-def transpile_file(content: Context, relative_filename: Path):
+def transpile_file(content: Context, filename: Path):
     # Setup destination file
-    filename_src = content.src_path / relative_filename.name
-    filename_dest = content.out_path / relative_filename.name
+    # filename_src = content.src_path / relative_filename.name
+    # filename_dest = content.out_path / relative_filename.name
+    filename_src = filename_dest = filename
 
-    logger.info(f"Transpiling file {filename_src} into {filename_dest}")
+    logger.info(f"Transpiling file {filename_src} ...")
 
     # Parse AST
-    try:
-        original_ast = cst.parse_module(filename_src.read_text())
-    except Exception as e:
-        raise TranspileException(e)
+    original_src = filename_src.read_text()
+    original_ast = cst.parse_module(original_src)
 
     # Apply transformations
     # for transformation in get_transformations():
@@ -89,7 +82,7 @@ def transpile_file(content: Context, relative_filename: Path):
 )
 @click.argument("src_dir", type=click.Path(exists=True, resolve_path=True))
 # @click.argument("out_dir", type=click.Path(exists=True, resolve_path=True, writable=True))
-def main(src_dir: str, out_dir: str, transformations: Optional[List[str]] = None):
+def main(src_dir: str, transformations: Optional[List[str]] = None):
     context = Context(Path(src_dir), Path(src_dir), set(transformations or []))
 
     if context.src_path.is_dir():
